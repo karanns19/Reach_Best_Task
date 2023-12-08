@@ -1,0 +1,19 @@
+.userLabel{
+    display: block;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: white;
+}
+
+.userInput{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    color: black;
+}
+
+select{
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+}

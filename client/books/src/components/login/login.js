@@ -3,21 +3,24 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { Loading } from 'notiflix/build/notiflix-loading-aio';
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
-import data from './service.js'
-
+import data from '../mainbody/service'
 
 // Created a Login Page for Dashboard - Signup & Register 
 
-const Login = () => {
+const Login = ({ onChange, onUserChange }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [signUp, setSignUp] = useState(true);
   const navigate = useNavigate()
 
+  // Email Validation Function
+
   const validateEmail = (input) => {
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailPattern.test(input);
   };
+
+  // Registration Function
 
   const handleRegistration = async () => {
     const response = await axios.get('http://localhost:3001/users');
@@ -50,6 +53,8 @@ const Login = () => {
 
   };
 
+  // Login Function
+
   const handleLogin = async () => {
     if (validateEmail(email)) {
       try {
@@ -61,11 +66,13 @@ const Login = () => {
         if (emails.includes(email)) {
           let index = emails.indexOf(email)
           if (password === passwords[index]) {
-            Loading.remove()
-            Notify.success('Login Successfully !!');
             data.email = email
             data.id = ids[index]
-            navigate('/dashboard')
+            Loading.remove()
+            onUserChange(email.split('@')[0])
+            onChange("loggedIn")
+            Notify.success('Login Successfully !!');
+            navigate('/bookApp')
           }
           else {
             Loading.remove()
@@ -83,9 +90,13 @@ const Login = () => {
     }
   };
 
+  // Toggle Function - To toggle between Register and Login Page
+
   const toggleAuthType = () => {
     setSignUp(!signUp);
   };
+
+  // Here I have used Tailwind Classes for Styling
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -96,10 +107,10 @@ const Login = () => {
             <label htmlFor="email" className="block mb-1">
               Email:
             </label>
-            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)}yy name="email" className="bg-transparent rounded-lg w-60 border-2 border-white px-2 py-1 mt-2" />
+            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} yy name="email" className="bg-transparent rounded-lg w-60 border-2 border-white px-2 py-1 mt-2" />
           </div>
           <div className="mb-4">
-            <label htmlFor="password"  className="block mb-1">
+            <label htmlFor="password" className="block mb-1">
               Password:
             </label>
             <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} name="password" className="bg-transparent rounded-lg w-60 border-2 border-white px-2 py-1 mt-2" />

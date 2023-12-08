@@ -11,6 +11,14 @@ const users = new schema({
         type:String,
         required: true
     },
+    genre:{
+        type:Array,
+        required: true
+    },
+    author:{
+        type:Array,
+        required: true
+    },
 })
 
 const model = mongoose.model("model",users)
